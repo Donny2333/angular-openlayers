@@ -90,6 +90,7 @@ aol.helpers.layers.heatmap.updateRadiusOnRadiusChange = function (radius, u1_, u
  */
 aol.models.layers.Layer = function() {
     aol.models.Model.apply(this, arguments);
+    this.attributes.name = undefined;
     this.attributes.brightness = undefined;
     this.attributes.contrast = undefined;
     this.attributes.hue = undefined;

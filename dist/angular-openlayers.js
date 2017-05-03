@@ -1,6 +1,5 @@
-/*! angular-openlayers - v1.0.0 - 2016-05-09
-* http://quentinlampin.github.io/angular-openlayers/
-* Copyright (c) 2016 Orange; Licensed MPL-2.0 */
+/*! angular-openlayers - v1.1.0 - 2017-05-03
+* Copyright (c) 2017 ; Licensed MPL-2.0 */
 
 
 (function(undefined) {
@@ -1496,6 +1495,7 @@ aol.helpers.layers.heatmap.updateRadiusOnRadiusChange = function (radius, u1_, u
  */
 aol.models.layers.Layer = function() {
     aol.models.Model.apply(this, arguments);
+    this.attributes.name = undefined;
     this.attributes.brightness = undefined;
     this.attributes.contrast = undefined;
     this.attributes.hue = undefined;
