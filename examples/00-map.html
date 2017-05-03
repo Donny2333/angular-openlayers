@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tile Sources Examples</title>
+
+    <link rel="stylesheet" href="../bower_components/ol4/ol.css">
+    <link rel="stylesheet" href="../dist/angular-openlayers.css">
+    <link rel="stylesheet" href="99-style.css">
+
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/ol4/ol-debug.js"></script>
+    <script src="../dist/angular-openlayers.js"></script>
+    <script src="00-map.js"></script>
+</head>
+
+<body ng-app="example">
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>AngularOpenLayers examples</h1>
+    </div>
+    <h2>Simple map</h2>
+    <aol-map>
+        <aol-layer-tile>
+            <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+            </aol-source-osm>
+        </aol-layer-tile>
+    </aol-map>
+</body>
+</html>

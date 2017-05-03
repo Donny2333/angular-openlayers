@@ -1,0 +1,29 @@
+{
+  "author": "Donny",
+  "name": "angular-openlayers",
+  "description": "angular-openlayers - AngularJS directives for OpenLayers 4",
+  "version": "1.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Donny2333/angular-openlayers"
+  },
+  "keywords": [
+    "angularjs",
+    "openlayers"
+  ],
+  "license": "MPL-2.0",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-uglify": "^0.9.2",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-encase": "^0.2.0",
+    "grunt-exec": "^0.4.6",
+    "grunt-jsdoc": "^0.6.8"
+  },
+  "dependencies": {}
+}

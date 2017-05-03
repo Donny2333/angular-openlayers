@@ -1,0 +1,25 @@
+{
+  "name": "angular-openlayers",
+  "version": "1.1.0",
+  "authors": [
+    "Donny<1021001390@qq.com>"
+  ],
+  "description": "OpenLayers4 directive for angular 1.x",
+  "main": "dist/angular-openlayers.js",
+  "keywords": [
+    "openlayers4",
+    "angular"
+  ],
+  "license": "MPL-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.6.0",
+    "ol4": "ol4-bower#^4.1.0"
+  }
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model updates example</title>
+
+    <link rel="stylesheet" href="../bower_components/ol4/ol.css">
+    <link rel="stylesheet" href="../dist/angular-openlayers.css">
+    <link rel="stylesheet" href="99-style.css">
+
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/ol4/ol-debug.js"></script>
+    <script src="../dist/angular-openlayers.js"></script>
+    <script src="04-addremove.js"></script>
+</head>
+
+<body ng-app="example">
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>AngularOpenLayers examples</h1>
+    </div>
+    <h2>Dynamic feature addition/remove example</h2>
+    <p>
+        The following example shows how to add/remove dynamically features on/off the map.
+    </p>
+    <div class="container" ng-controller="exampleCtrl as ctrl">
+        <aol-map>
+            <aol-view aol-zoom="6">
+                <aol-coordinate aol-x="5" aol-y="45">
+                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                </aol-coordinate>
+            </aol-view>
+            <aol-layer-tile>
+                <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                </aol-source-osm>
+            </aol-layer-tile>
+
+            <aol-layer-vector>
+                <aol-source-vector>
+                    <aol-feature ng-repeat="coordinate in ctrl.coordinates">
+                        <aol-style>
+                            <aol-style-circle aol-radius="10" aol-snap-to-pixel="true">
+                                <aol-style-fill aol-color="'#0000FF'"></aol-style-fill>
+                                <aol-style-stroke aol-color="'#FF0000'" aol-width="1.25"></aol-style-stroke>
+                            </aol-style-circle>
+                        </aol-style>
+                        <aol-geometry-point>
+                            <aol-coordinate aol-model="coordinate">
+                                <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                            </aol-coordinate>
+                        </aol-geometry-point>
+                    </aol-feature>
+                </aol-source-vector>
+            </aol-layer-vector>
+        </aol-map>
+        <div class="well">
+            <button type="button" ng-click="ctrl.addFeature()"
+                    class="btn dropdown-button navbar-btn btn-success center-block">add
+            </button>
+            <button type="button" ng-click="ctrl.removeFeature()"
+                    class="btn dropdown-button navbar-btn btn-warning center-block">remove
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

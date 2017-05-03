@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: layers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: layers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @namespace */
+aol.models.layers = {};
+
+/**
+ * This namespace contains helper functions for the layers directives.
+ * @namespace
+ */
+aol.helpers.layers = {};
+
+/**
+ * This namespace contains helper functions for the heatmap directive.
+ * @namespace
+ */
+aol.helpers.layers.base = {};
+
+/**
+ * add layer to parent instance
+ * @param parentInst
+ * @param instance
+ * @param parentCtrl
+ */
+aol.helpers.layers.base.onParentInstance = function(parentInst, instance, parentCtrl) {
+    switch(parentCtrl.name){
+        case 'aolCollectionLayer':
+            parentInst.push(instance);
+            break;
+        case 'aolMap':
+            parentInst.addLayer(instance);
+            break;
+        default:
+            aol.log.error(this.name + '\' parent is invalid: ', parentCtrl.name);
+            break;
+    }
+};
+
+/**
+ * remove instance from parent
+ * @param parentInst
+ * @param instance
+ * @param parentCtrl
+ */
+aol.helpers.layers.base.onDestroy = function(parentInst, instance, parentCtrl) {
+    switch(parentCtrl.name){
+        case 'aolCollectionLayer':
+            parentInst.remove(instance);
+            break;
+        case 'aolMap':
+            parentInst.removeLayer(instance);
+            break;
+        default:
+            aol.log.error(this.name + '\' parent is invalid: ', parentCtrl.name);
+            break;
+    }
+};
+
+
+/**
+ * This namespace contains helper functions for the heatmap directive.
+ * @namespace
+ */
+aol.helpers.layers.heatmap = {};
+
+
+/**
+ * update radius on radius attribute change
+ * @param radius
+ * @param u1_
+ * @param u2_
+ * @param instanceCtrl
+ */
+aol.helpers.layers.heatmap.updateRadiusOnRadiusChange = function (radius, u1_, u2_, instanceCtrl) {
+    instanceCtrl.getPromise().then(function (instance) {instance.setRadius(parseFloat(radius));});
+};
+
+/**
+ * Layer base model class.
+ *
+ * @class
+ * @augments aol.models.Model
+ * @property {(number|undefined)} attributes.brightness       - brightness.
+ * @property {(number|undefined)} attributes.contrast         - contrast.
+ * @property {(number|undefined)} attributes.hue              - hue.
+ * @property {(number|undefined)} attributes.opacity          - opacity.
+ * @property {(number|undefined)} attributes.saturation       - saturation.
+ * @property {(boolean|undefined)} attributes.visible         - is the layer visible?.
+ * @property {(ol.Extent|undefined)} attributes.extent        - extent (where the layer is shown).
+ * @property {(number|undefined)} attributes.zIndex           - zIndex (highest zIndex layer is on top).
+ * @property {(number|undefined)} attributes.minResolution    - min resolution.
+ * @property {(number|undefined)} attributes.maxResolution    - max resolution.
+ */
+aol.models.layers.Layer = function() {
+    aol.models.Model.apply(this, arguments);
+    this.attributes.brightness = undefined;
+    this.attributes.contrast = undefined;
+    this.attributes.hue = undefined;
+    this.attributes.opacity = undefined;
+    this.attributes.saturation = undefined;
+    this.attributes.visible = undefined;
+    this.attributes.extent = undefined;
+    this.attributes.zIndex = undefined;
+    this.attributes.minResolution = undefined;
+    this.attributes.maxResolution = undefined;
+    this.callbacks['change'] = undefined;
+    this.callbacks['change:brightness'] = undefined;
+    this.callbacks['change:contrast'] = undefined;
+    this.callbacks['change:extent'] = undefined;
+    this.callbacks['change:hue'] = undefined;
+    this.callbacks['change:maxResolution'] = undefined;
+    this.callbacks['change:minResolution'] = undefined;
+    this.callbacks['change:opacity'] = undefined;
+    this.callbacks['change:saturation'] = undefined;
+    this.callbacks['change:visible'] = undefined;
+    this.callbacks['change:zIndex'] = undefined;
+    this.callbacks['propertychange'] = undefined;
+};
+
+/**
+ * Heatmap layer model class.
+ *
+ * @class
+ * @augments aol.models.layers.Layer
+ * @property {(string[]|undefined)} attributes.gradient    - gradient of the heatmap as CSS color strings, e.g. '#00f'
+ * @property {(number|undefined)} attributes.radius        - radius.
+ * @property {(number|undefined)} attributes.blur          - blur.
+ * @property {(number|undefined)} attributes.shadow        - opacity.
+ * @property {(number|undefined)} attributes.weight        - saturation.
+ * @property {(ol.source.Vector|undefined)} attributes.source   - source.
+ */
+aol.models.layers.Heatmap = function() {
+    aol.models.layers.Layer.apply(this, arguments);
+    this.attributes.gradient = undefined;
+    this.attributes.radius = 8;
+    this.attributes.blur = undefined;
+    this.attributes.shadow = undefined;
+    this.attributes.weight = undefined;
+    this.attributes.source = undefined;
+    this.watchers['radius'] = aol.helpers.layers.heatmap.updateRadiusOnRadiusChange;
+    this.callbacks['change:gradient'] = undefined;
+    this.callbacks['change:blur'] = undefined;
+    this.callbacks['change:radius'] = undefined;
+    this.callbacks['postcompose'] = undefined;
+    this.callbacks['precompose'] = undefined;
+    this.callbacks['propertychange'] = undefined;
+    this.callbacks['render'] = undefined;
+};
+
+/**
+ * Image layer model class.
+ *
+ * @class
+ * @augments aol.models.layers.Layer
+ * @property {(ol.source.Image|undefined)} attributes.source  - source.
+ * @property {(ol.Map|undefined)} attributes.map              - map on which the layers is overlain.
+ */
+aol.models.layers.Image = function() {
+    aol.models.layers.Layer.apply(this, arguments);
+    this.attributes.source = undefined;
+    this.attributes.map = undefined;
+    this.callbacks['change:source'] = undefined;
+    this.callbacks['postcompose'] = undefined;
+    this.callbacks['precompose'] = undefined;
+    this.callbacks['propertychange'] = undefined;
+    this.callbacks['render'] = undefined;
+};
+
+/**
+ * Tile layer model class.
+ *
+ * @class
+ * @augments aol.models.layers.Layer
+ * @property {(ol.source.Image|undefined)} attributes.source          - source.
+ * @property {(ol.Map|undefined)} attributes.map                      - map on which the layers is overlain.
+ * @property {(number|undefined)} attributes.preload                  - set the layer as an overlay on map.
+ * @property {(boolean|undefined)} attributes.useInterimTilesOnError  - use interim tile on load error?
+ */
+aol.models.layers.Tile = function() {
+    aol.models.layers.Layer.apply(this, arguments);
+    this.attributes.source = undefined;
+    this.attributes.map = undefined;
+    this.attributes.preload = undefined;
+    this.attributes.useInterimTilesOnError = undefined;
+    this.callbacks['change:source'] = undefined;
+    this.callbacks['change:preload'] = undefined;
+    this.callbacks['change:useInterimTilesOnError'] = undefined;
+    this.callbacks['postcompose'] = undefined;
+    this.callbacks['precompose'] = undefined;
+    this.callbacks['propertychange'] = undefined;
+    this.callbacks['render'] = undefined;
+};
+
+/**
+ * Vector layer model class.
+ *
+ * @class
+ * @augments aol.models.layers.Layer
+ * @property {function|undefined} attributes.renderOrder        - function to order the rendering of vectors.
+ * @property {(number|undefined)} attributes.renderBuffer       - number of pixels to render outside of the viewport.
+ * @property {(ol.source.Vector|undefined)} attributes.source    - source.
+ * @property {(ol.style.Style|ol.style.Style[]|ol.style.StyleFunction|undefined)} attributes.style    -  style.
+ * @property {(ol.Map|undefined)} attributes.map                        - map on which the layers is overlain.
+ * @property {(boolean|undefined)} attributes.updateWhileAnimating      - update while animating the source objects?
+ * @property {(boolean|undefined)} attributes.updateWhileInteracting    - update while interacting with the map?
+ */
+aol.models.layers.Vector = function() {
+    aol.models.layers.Layer.apply(this, arguments);
+    this.attributes.renderOrder = undefined;
+    this.attributes.renderBuffer = undefined;
+    this.attributes.source = undefined;
+    this.attributes.style = undefined;
+    this.attributes.map = undefined;
+    this.attributes.updateWhileAnimating = undefined;
+    this.attributes.updateWhileInteracting = undefined;
+    this.callbacks['change:source'] = undefined;
+    this.callbacks['postcompose'] = undefined;
+    this.callbacks['precompose'] = undefined;
+    this.callbacks['propertychange'] = undefined;
+    this.callbacks['render'] = undefined;
+};
+
+
+
+/**
+ * LayerHeatmap directive class.
+ * @class
+ * @augments aol.Directive
+ */
+aol.directives.LayerHeatmap = function() {
+    aol.Directive.apply(this, arguments);
+    this.name = 'aolLayerHeatmap';
+    this.require = ['?^aolCollectionLayer', '^aolMap'];
+    this.replace = true;
+    this.instance = ol.layer.Heatmap;
+    this.model = aol.models.layers.Heatmap;
+    this.onParentInstance = aol.helpers.layers.base.onParentInstance;
+    this.onDestroy = aol.helpers.layers.base.onDestroy;
+};
+
+/**
+ * LayerImage directive class.
+ * @class
+ * @augments aol.Directive
+ */
+aol.directives.LayerImage = function() {
+    aol.Directive.apply(this, arguments);
+    this.name = 'aolLayerImage';
+    this.require = ['?^aolCollectionLayer', '^aolMap'];
+    this.replace = true;
+    this.instance = ol.layer.Image;
+    this.model = aol.models.layers.Image;
+    this.onParentInstance = aol.helpers.layers.base.onParentInstance;
+    this.onDestroy = aol.helpers.layers.base.onDestroy;
+};
+
+/**
+ * LayerTile directive class.
+ * @class
+ * @augments aol.Directive
+ */
+aol.directives.LayerTile = function() {
+    aol.Directive.apply(this, arguments);
+    this.name = 'aolLayerTile';
+    this.require = ['?^aolCollectionLayer', '^aolMap'];
+    this.replace = true;
+    this.instance = ol.layer.Tile;
+    this.model = aol.models.layers.Tile;
+    this.onParentInstance = aol.helpers.layers.base.onParentInstance;
+    this.onDestroy = aol.helpers.layers.base.onDestroy;
+};
+
+/**
+ * LayerVector directive class.
+ * @class
+ * @augments aol.Directive
+ */
+aol.directives.LayerVector = function() {
+    aol.Directive.apply(this, arguments);
+    this.name = 'aolLayerVector';
+    this.require = ['?^aolCollectionLayer', '^aolMap'];
+    this.replace = true;
+    this.instance = ol.layer.Vector;
+    this.model = aol.models.layers.Vector;
+    this.onParentInstance = aol.helpers.layers.base.onParentInstance;
+    this.onDestroy = aol.helpers.layers.base.onDestroy;
+};
+
+aol.registerDirective(new aol.directives.LayerHeatmap());
+aol.registerDirective(new aol.directives.LayerImage());
+aol.registerDirective(new aol.directives.LayerTile());
+aol.registerDirective(new aol.directives.LayerVector());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="aol.Directive.html">Directive</a></li><li><a href="aol.directives.CollectionCoordinate.html">CollectionCoordinate</a></li><li><a href="aol.directives.CollectionInteraction.html">CollectionInteraction</a></li><li><a href="aol.directives.CollectionLayer.html">CollectionLayer</a></li><li><a href="aol.directives.CollectionStyle.html">CollectionStyle</a></li><li><a href="aol.directives.ControlAttribution.html">ControlAttribution</a></li><li><a href="aol.directives.ControlFullScreen.html">ControlFullScreen</a></li><li><a href="aol.directives.ControlMousePosition.html">ControlMousePosition</a></li><li><a href="aol.directives.ControlOverviewMap.html">ControlOverviewMap</a></li><li><a href="aol.directives.ControlRotate.html">ControlRotate</a></li><li><a href="aol.directives.ControlScaleLine.html">ControlScaleLine</a></li><li><a href="aol.directives.ControlZoom.html">ControlZoom</a></li><li><a href="aol.directives.ControlZoomSlider.html">ControlZoomSlider</a></li><li><a href="aol.directives.ControlZoomToExtent.html">ControlZoomToExtent</a></li><li><a href="aol.directives.Coordinate.html">Coordinate</a></li><li><a href="aol.directives.Feature.html">Feature</a></li><li><a href="aol.directives.GeometryCircle.html">GeometryCircle</a></li><li><a href="aol.directives.GeometryLinearRing.html">GeometryLinearRing</a></li><li><a href="aol.directives.GeometryLineString.html">GeometryLineString</a></li><li><a href="aol.directives.GeometryMultiLineString.html">GeometryMultiLineString</a></li><li><a href="aol.directives.GeometryMultiPoint.html">GeometryMultiPoint</a></li><li><a href="aol.directives.GeometryMultiPolygon.html">GeometryMultiPolygon</a></li><li><a href="aol.directives.GeometryPoint.html">GeometryPoint</a></li><li><a href="aol.directives.GeometryPolygon.html">GeometryPolygon</a></li><li><a href="aol.directives.InteractionDefaults.html">InteractionDefaults</a></li><li><a href="aol.directives.InteractionSelect.html">InteractionSelect</a></li><li><a href="aol.directives.InteractionTranslate.html">InteractionTranslate</a></li><li><a href="aol.directives.LayerHeatmap.html">LayerHeatmap</a></li><li><a href="aol.directives.LayerImage.html">LayerImage</a></li><li><a href="aol.directives.LayerTile.html">LayerTile</a></li><li><a href="aol.directives.LayerVector.html">LayerVector</a></li><li><a href="aol.directives.Map.html">Map</a></li><li><a href="aol.directives.Overlay.html">Overlay</a></li><li><a href="aol.directives.Projection.html">Projection</a></li><li><a href="aol.directives.SourceBingMaps.html">SourceBingMaps</a></li><li><a href="aol.directives.SourceCluster.html">SourceCluster</a></li><li><a href="aol.directives.SourceImageMapGuide.html">SourceImageMapGuide</a></li><li><a href="aol.directives.SourceImageStatic.html">SourceImageStatic</a></li><li><a href="aol.directives.SourceImageVector.html">SourceImageVector</a></li><li><a href="aol.directives.SourceImageWMS.html">SourceImageWMS</a></li><li><a href="aol.directives.SourceMapQuest.html">SourceMapQuest</a></li><li><a href="aol.directives.SourceOSM.html">SourceOSM</a></li><li><a href="aol.directives.SourceRaster.html">SourceRaster</a></li><li><a href="aol.directives.SourceStamen.html">SourceStamen</a></li><li><a href="aol.directives.SourceTileARCGistRest.html">SourceTileARCGistRest</a></li><li><a href="aol.directives.SourceTileJSON.html">SourceTileJSON</a></li><li><a href="aol.directives.SourceTileUTFGrid.html">SourceTileUTFGrid</a></li><li><a href="aol.directives.SourceTileVector.html">SourceTileVector</a></li><li><a href="aol.directives.SourceTileWMS.html">SourceTileWMS</a></li><li><a href="aol.directives.SourceVector.html">SourceVector</a></li><li><a href="aol.directives.SourceWMTS.html">SourceWMTS</a></li><li><a href="aol.directives.SourceXYZ.html">SourceXYZ</a></li><li><a href="aol.directives.SourceZoomify.html">SourceZoomify</a></li><li><a href="aol.directives.Style.html">Style</a></li><li><a href="aol.directives.StyleCircle.html">StyleCircle</a></li><li><a href="aol.directives.StyleFill.html">StyleFill</a></li><li><a href="aol.directives.StyleIcon.html">StyleIcon</a></li><li><a href="aol.directives.StyleRegularShape.html">StyleRegularShape</a></li><li><a href="aol.directives.StyleStroke.html">StyleStroke</a></li><li><a href="aol.directives.StyleText.html">StyleText</a></li><li><a href="aol.directives.View.html">View</a></li><li><a href="aol.models.collections.Coordinate.html">Coordinate</a></li><li><a href="aol.models.collections.Interaction.html">Interaction</a></li><li><a href="aol.models.collections.Layer.html">Layer</a></li><li><a href="aol.models.collections.Style.html">Style</a></li><li><a href="aol.models.controls.Attribution.html">Attribution</a></li><li><a href="aol.models.controls.Control.html">Control</a></li><li><a href="aol.models.controls.FullScreen.html">FullScreen</a></li><li><a href="aol.models.controls.MousePosition.html">MousePosition</a></li><li><a href="aol.models.controls.OverviewMap.html">OverviewMap</a></li><li><a href="aol.models.controls.Rotate.html">Rotate</a></li><li><a href="aol.models.controls.ScaleLine.html">ScaleLine</a></li><li><a href="aol.models.controls.Zoom.html">Zoom</a></li><li><a href="aol.models.controls.ZoomSlider.html">ZoomSlider</a></li><li><a href="aol.models.controls.ZoomToExtent.html">ZoomToExtent</a></li><li><a href="aol.models.Coordinate.html">Coordinate</a></li><li><a href="aol.models.Feature.html">Feature</a></li><li><a href="aol.models.geometries.Circle.html">Circle</a></li><li><a href="aol.models.geometries.LinearRing.html">LinearRing</a></li><li><a href="aol.models.geometries.LineString.html">LineString</a></li><li><a href="aol.models.geometries.MultiLineString.html">MultiLineString</a></li><li><a href="aol.models.geometries.MultiPoint.html">MultiPoint</a></li><li><a href="aol.models.geometries.MultiPolygon.html">MultiPolygon</a></li><li><a href="aol.models.geometries.Point.html">Point</a></li><li><a href="aol.models.geometries.Polygon.html">Polygon</a></li><li><a href="aol.models.geometries.SimpleGeometry.html">SimpleGeometry</a></li><li><a href="aol.models.interactions.Defaults.html">Defaults</a></li><li><a href="aol.models.interactions.Pointer.html">Pointer</a></li><li><a href="aol.models.interactions.Select.html">Select</a></li><li><a href="aol.models.interactions.Translate.html">Translate</a></li><li><a href="aol.models.layers.Heatmap.html">Heatmap</a></li><li><a href="aol.models.layers.Image.html">Image</a></li><li><a href="aol.models.layers.Layer.html">Layer</a></li><li><a href="aol.models.layers.Tile.html">Tile</a></li><li><a href="aol.models.layers.Vector.html">Vector</a></li><li><a href="aol.models.Map.html">Map</a></li><li><a href="aol.models.Model.html">Model</a></li><li><a href="aol.models.Overlay.html">Overlay</a></li><li><a href="aol.models.Projection.html">Projection</a></li><li><a href="aol.models.sources.BingMaps.html">BingMaps</a></li><li><a href="aol.models.sources.Cluster.html">Cluster</a></li><li><a href="aol.models.sources.ImageCanvas.html">ImageCanvas</a></li><li><a href="aol.models.sources.ImageMapGuide.html">ImageMapGuide</a></li><li><a href="aol.models.sources.ImageStatic.html">ImageStatic</a></li><li><a href="aol.models.sources.ImageVector.html">ImageVector</a></li><li><a href="aol.models.sources.ImageWMS.html">ImageWMS</a></li><li><a href="aol.models.sources.MapQuest.html">MapQuest</a></li><li><a href="aol.models.sources.OSM.html">OSM</a></li><li><a href="aol.models.sources.Raster.html">Raster</a></li><li><a href="aol.models.sources.Stamen.html">Stamen</a></li><li><a href="aol.models.sources.TileArcGISRest.html">TileArcGISRest</a></li><li><a href="aol.models.sources.TileImage.html">TileImage</a></li><li><a href="aol.models.sources.TileJSON.html">TileJSON</a></li><li><a href="aol.models.sources.TileUTFGrid.html">TileUTFGrid</a></li><li><a href="aol.models.sources.TileVector.html">TileVector</a></li><li><a href="aol.models.sources.TileWMS.html">TileWMS</a></li><li><a href="aol.models.sources.Vector.html">Vector</a></li><li><a href="aol.models.sources.WMTS.html">WMTS</a></li><li><a href="aol.models.sources.XYZ.html">XYZ</a></li><li><a href="aol.models.sources.Zoomify.html">Zoomify</a></li><li><a href="aol.models.styles.Circle.html">Circle</a></li><li><a href="aol.models.styles.Fill.html">Fill</a></li><li><a href="aol.models.styles.Icon.html">Icon</a></li><li><a href="aol.models.styles.RegularShape.html">RegularShape</a></li><li><a href="aol.models.styles.Stroke.html">Stroke</a></li><li><a href="aol.models.styles.Style.html">Style</a></li><li><a href="aol.models.styles.Text.html">Text</a></li><li><a href="aol.models.View.html">View</a></li><li><a href="aol.overrides.collections.Coordinate.html">Coordinate</a></li><li><a href="aol.overrides.collections.Interaction.html">Interaction</a></li><li><a href="aol.overrides.collections.Layer.html">Layer</a></li><li><a href="aol.overrides.collections.Style.html">Style</a></li><li><a href="aol.overrides.coordinate.Coordinate.html">Coordinate</a></li><li><a href="aol.overrides.geometries.Circle.html">Circle</a></li><li><a href="aol.overrides.geometries.LinearRing.html">LinearRing</a></li><li><a href="aol.overrides.geometries.LineString.html">LineString</a></li><li><a href="aol.overrides.geometries.MultiLineString.html">MultiLineString</a></li><li><a href="aol.overrides.geometries.MultiPoint.html">MultiPoint</a></li><li><a href="aol.overrides.geometries.MultiPolygon.html">MultiPolygon</a></li><li><a href="aol.overrides.geometries.Point.html">Point</a></li><li><a href="aol.overrides.geometries.Polygon.html">Polygon</a></li></ul><h3>Namespaces</h3><ul><li><a href="aol.html">aol</a></li><li><a href="aol.directives.html">directives</a></li><li><a href="aol.helpers.html">helpers</a></li><li><a href="aol.helpers.collections.html">collections</a></li><li><a href="aol.helpers.collections.coordinate.html">coordinate</a></li><li><a href="aol.helpers.controls.html">controls</a></li><li><a href="aol.helpers.coordinate.html">coordinate</a></li><li><a href="aol.helpers.geometries.html">geometries</a></li><li><a href="aol.helpers.interactions.html">interactions</a></li><li><a href="aol.helpers.layers.html">layers</a></li><li><a href="aol.helpers.layers.base.html">base</a></li><li><a href="aol.helpers.layers.heatmap.html">heatmap</a></li><li><a href="aol.log.html">log</a></li><li><a href="aol.models.html">models</a></li><li><a href="aol.models.collections.html">collections</a></li><li><a href="aol.models.controls.html">controls</a></li><li><a href="aol.models.geometries.html">geometries</a></li><li><a href="aol.models.interactions.html">interactions</a></li><li><a href="aol.models.layers.html">layers</a></li><li><a href="aol.models.sources.html">sources</a></li><li><a href="aol.models.styles.html">styles</a></li><li><a href="aol.overrides.html">overrides</a></li><li><a href="aol.overrides.collections.html">collections</a></li><li><a href="aol.overrides.coordinate.html">coordinate</a></li><li><a href="aol.overrides.geometries.html">geometries</a></li></ul><h3>Global</h3><ul><li><a href="global.html#librairy">librairy</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon May 09 2016 10:43:59 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

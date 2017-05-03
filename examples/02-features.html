@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feature example</title>
+
+    <link rel="stylesheet" href="../bower_components/ol4/ol.css">
+    <link rel="stylesheet" href="../dist/angular-openlayers.css">
+    <link rel="stylesheet" href="99-style.css">
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/ol4/ol-debug.js"></script>
+    <script src="../dist/angular-openlayers.js"></script>
+    <script src="02-features.js"></script>
+</head>
+
+<body ng-app="example">
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>AngularOpenLayers examples</h1>
+    </div>
+    <h2>Feature example</h2>
+    <p>
+        The following example demonstrates how to add a feature on the map. Here, we add a feature at location
+        (lat: 45, lon: 5).
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    [...]
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="5" aol-y="45">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="5" aol-y="45">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+            </aol-map>
+        </div>
+    </div>
+    <div class="alert alert-info" role="alert">
+        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+        Unless feature coordinates are expressed in the same projected coordinate system as the map, here EPSG:3857,
+        their coordinates system is required for the map to correctly display the features. In most cases, geographical
+        coordinates are expressed in the EPSG:4326 coordinate system, i.e. latitude and longitude on a sphere.
+    </div>
+</div>
+</body>
+</html>

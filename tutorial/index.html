@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>angular-openlayers tutorial</title>
+
+    <link rel="stylesheet" href="../bower_components/ol4/ol.css">
+    <link rel="stylesheet" href="../dist/angular-openlayers.css">
+    <link rel="stylesheet" href="99-style.css">
+
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/ol4/ol-debug.js"></script>
+    <script src="../dist/angular-openlayers.js"></script>
+    <script src="tutorial.js"></script>
+</head>
+
+<body ng-app="example">
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>angular-openlayers tutorial</h1>
+    </div>
+    <h2>Foreword</h2>
+    <p>
+        <strong>angular-openlayers</strong> is a set of Angular directives for OpenLayers.
+        <strong>angular-openlayers</strong> is not endorsed by OpenLayers nor Angular, but its developers do their best
+        to keep it up-to-date with both projects.
+    </p>
+    <p>
+        The following document demonstrates <strong>angular-openlayers</strong> main features and is the entry point for
+        developers willing to use it.
+    </p>
+    <h2>Using <strong>angular-openlayers</strong></h2>
+    <strong>angular-openlayers</strong> requires both Angular and OpenLayers.
+    Installing those may be achieved in different ways, depending on what suits you best. In the end, your html file
+    should be similar to this.
+
+    <div class="container-fluid">
+        <div hljs escape="false">
+            &lt;html&gt;
+            &lt;head&gt;
+            &lt;link rel="stylesheet" href="path/to/ol.css"&gt;
+            &lt;link rel="stylesheet" href="path/to/angular-openlayers.css"&gt;
+            &lt;script src="path/to/angular.js"&gt;&lt;/script&gt;
+            &lt;script src="path/to/angular-openlayers.js"&gt;&lt;/script&gt;
+            &lt;script src="path/to/ol.js"&gt;&lt;/script&gt;
+            &lt;script&gt;angular.module('example',['angular-openlayers']);&lt;/script&gt;
+            &lt;/head&gt;
+            &lt;body ng-app="example"&gt;
+            [...]
+            &lt;/body&gt;
+            &lt;/html&gt;
+        </div>
+        <span class="alert-info">
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+            Notice the line where we tell angular that the module 'example' depends on <strong>angular-openlayers</strong>.
+        </span>
+    </div>
+    <h2>Setting up a simple map</h2>
+    <p>
+        The following example demonstrates how to setup a simple map, fetching tiles from the OpenStreetMap project.
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+
+
+            [in body section]
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+            </aol-map>
+
+
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+    <p>
+        In angular-openlayers, the &lt;<strong>aol-map</strong>&gt; is the base directive. It creates a map instance
+        which is further configured by children directives. In this simple example, we make use of the
+        &lt;<strong>aol-layer-tile</strong>&gt; and the &lt;<strong>aol-source-osm</strong>&gt; directive to tell the
+        map
+        to fetch the tiles from the OpenStreetMap project servers.
+    </p>
+    <h2>Specifying the zoom level and map center</h2>
+    <p>
+        By default, the map is centered on the spherical coordinates (latitude: 0, longitude: 0) and is zoomed-out.
+        It is possible to change this behavior using the &lt;<strong>aol-view</strong>&gt; directive. Here, we center
+        the
+        map at the coordinates (latitude: 45.76, longitude: 4.84); i.e Lyon; and set up the zoom level so that the view
+        encompass the whole city.
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 col-lg-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-view aol-zoom="12">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 col-lg-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-view aol-zoom="12">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+    <p>
+        When specifying coordinates, one must use the &lt;<strong>aol-coordinate</strong>&gt; directive. This directive
+        has 3 attributes: <strong>aol-x</strong>, <strong>aol-y</strong> and <strong>aol-projection</strong>.
+    </p>
+    <ul>
+        <li><strong>aol-x</strong>and <strong>aol-y</strong> are the coordinates in the coordinate system.
+            The corresponding projection; i.e. coordinate system to the projected coordinate system; is specified using
+            the <strong>aol-projection</strong> directive.
+        </li>
+        <li><strong>aol-projection</strong> specifies which projection is to be used to translate the
+            <strong>aol-x</strong>
+            and <strong>aol-y</strong> coordinates into the projected (2D) view. When <strong>aol-projection</strong> is
+            omitted,
+            the coordinates are assumed to be expressed in their projected form i.e. <strong>EPSG:3857</strong>.
+        </li>
+    </ul>
+
+    <h2>Adding zoom controls, scale line, attributes, etc.</h2>
+    <p>
+        By default, the map is barebone, there is no zoom buttons, no scale, no attribution, nothing though interacting
+        with
+        the map is still possible as pan and zoom interactions are set by default. <strong>angular-openlayers</strong>
+        lets
+        you add UI elements to control the zoom levels, show a minimap, a scale line and so on. The following example
+        demonstrates how to do so.
+    </p>
+    <span class="alert-info">
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+            Note that in previous examples, we have added the attribution controls (without mentioning it, sorry!) because
+            the OpenStreetMap license requires it.
+        </span>
+    <div class="row flex">
+        <div hljs class="col-md-7 col-lg-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-control-zoom></aol-control-zoom>
+                <aol-control-scaleline></aol-control-scaleline>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 col-lg-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-control-zoom></aol-control-zoom>
+                <aol-control-scaleline></aol-control-scaleline>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+
+    <h2>Using multiple tiles providers</h2>
+    In the previous example, we've seen how to fetch tiles from the OpenStreetMap project servers. Let's discover how to
+    fetch tiles from other providers.
+
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-bingmaps
+                            aol-key="'your key'"
+                            aol-imagery-set="'Road'">
+                    </aol-source-bingmaps>
+                </aol-layer-tile>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-bingmaps
+                            aol-key="'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'"
+                            aol-imagery-set="'Road'">
+                    </aol-source-bingmaps>
+                </aol-layer-tile>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+    <p>
+        <strong>angular-openlayers</strong> is built upon OpenLayers which provides handlers; i.e. "sources"; for a vast
+        majority of
+        existing tile servers. Here, we use the source for the BingMaps tile servers. This source is accessible in
+        <strong>angular-openlayers</strong> with the &lt;<strong>aol-source-bingmaps</strong>&gt; directive. Similarly,
+        the other sources available in OpenLayers are available using the &lt;<strong>aol-source-*</strong>&gt;
+        directives.
+        For example, the next snippet shows how to use the MapQuest servers.
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-mapquest aol-layer="'sat'">
+                    </aol-source-mapquest>
+                </aol-layer-tile>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-mapquest aol-layer="'sat'">
+                    </aol-source-mapquest>
+                </aol-layer-tile>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+    <p>
+        OpenLayers also provides generic handlers for servers that accept URL requests containing the x,y,z of the tiles
+        to fetch. The following example makes use of the &lt;<strong>aol-source-xyz</strong>&gt; to fetch tiles from the
+        MapBox servers.
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-xyz
+                            aol-url="'https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=your.token'">
+                    </aol-source-xyz>
+                </aol-layer-tile>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-xyz
+                            aol-url="'https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicXVlbnRpbmxhbXBpbiIsImEiOiJlN2EyYzdhNjNhMzY4NWE1YjFhOTk4ZDQ0YTY1ZTgzZiJ9.5CSZpBuYh7NBID4Y3kgYkA'">
+                    </aol-source-xyz>
+                </aol-layer-tile>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+    <h2>Showing features on the map</h2>
+    <p>
+        This example shows how to add a "feature" to the map at a given location, here at (latitude: 45.76, longiture:
+        4.84).
+        Please notice the small light-blue circle on the bridged labeled "Pont Wilson".
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+
+    <p>
+        In this example, we add a vector layer (features being vectors) using the &lt;<strong>aol-layer-vector</strong>&gt;
+        directive. we add a directive to the map after the tile layer directive (the order of the layers directives
+        dictates their display order).
+        Similarly to tile layers, we also add a source to the layer using the &lt;<strong>aol-source-vector</strong>&gt;.
+        Finally, we add features to the source using the &lt;<strong>aol-feature</strong>&gt; directive.
+    </p>
+    <p>
+        The &lt;<strong>aol-feature</strong>&gt; directive requires a geometry to be displayed. The geometry is created
+        using one of the &lt;<strong>aol-geometry-*</strong>&gt; directives, here
+        &lt;<strong>aol-geometry-point</strong>&gt;.
+        Geometries are described by their coordinate(s). In the previous example, the point geometry is described by a
+        single
+        coordinate, i.e. the location (latitude: 45.76, longitude: 4.84).
+    </p>
+    <p>
+        When a geometry requires more than one coordinate, the coordinates are given using the
+        &lt;<strong>aol-collection-coordinate</strong>&gt; directive. In the following example, we define a feature
+        showing a linestring geometry made of 2 segments (3 coordinates). To that effect, we use the
+        &lt;<strong>aol-geometry-linestring</strong>&gt; directive.
+    </p>
+
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-linestring>
+                                <aol-collection-coordinate>
+                                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                    <aol-coordinate aol-x="4.845" aol-y="45.765">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                    <aol-coordinate aol-x="4.85" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                </aol-collection-coordinate>
+                            </aol-geometry-linestring>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-linestring>
+                                <aol-collection-coordinate>
+                                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                    <aol-coordinate aol-x="4.845" aol-y="45.765">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                    <aol-coordinate aol-x="4.85" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                </aol-collection-coordinate>
+                            </aol-geometry-linestring>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+    <h2>Styling features</h2>
+    <p>
+        By default, features are represented using blue strokes. The &lt;<strong>aol-style-*</strong>&gt;
+        directives allow specifying custom styles.
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-style>
+                                <aol-style-circle aol-radius="10" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="'#99FF66'"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'"
+                                                      aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                                <aol-geometry-point>
+                                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                </aol-geometry-point>
+                            </aol-style>
+                        </aol-feature>
+                        <aol-feature>
+                            <aol-geometry-linestring>
+                                <aol-collection-coordinate>
+                                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                    <aol-coordinate aol-x="4.845" aol-y="45.765">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                    <aol-coordinate aol-x="4.85" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                </aol-collection-coordinate>
+                            </aol-geometry-linestring>
+                            <aol-style>
+                                <aol-style-stroke aol-color="'#FF00CC'" aol-width="2.25"></aol-style-stroke>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                            <aol-style>
+                                <aol-style-circle aol-radius="10" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="'#99FF66'"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'"
+                                                      aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                            </aol-style>
+                        </aol-feature>
+                        <aol-feature>
+                            <aol-geometry-linestring>
+                                <aol-collection-coordinate>
+                                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                    <aol-coordinate aol-x="4.845" aol-y="45.765">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                    <aol-coordinate aol-x="4.85" aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                </aol-collection-coordinate>
+                            </aol-geometry-linestring>
+                            <aol-style>
+                                <aol-style-stroke aol-color="'#FF00CC'" aol-width="2.25"></aol-style-stroke>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+    <p>
+        In this example, we have depicted the point geometry feature as a circle filled with a light green color
+        a and black stroke. We also styled the segments so that they show up magenta and slightly thicker than with the
+        default settings.
+    </p>
+    <h2>Moving features</h2>
+    <p>
+        The very reason why we've decided to develop <strong>angular-openlayers</strong> is to be able to display
+        maps that are dynamically updated on model changes. One such requirement is to move features on the map when
+        its coordinates are updated in the model. The following example shows how to do so.
+    </p>
+
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            [angular controller]
+
+            angular.module('example').controller('movingFeatureController', function(){
+            var _this = this;
+            _this.featureLongitude = 4.84;
+            _this.featureLatitude = 45.76;
+
+            [html file]
+
+            <div ng-controller="movingFeatureController as ctrl"></div>
+            <aol-map>
+                <aol-view aol-zoom="10">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="ctrl.featureLongitude" aol-y="ctrl.featureLatitude">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                            <aol-style>
+                                <aol-style-circle aol-radius="10" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="'#99FF66'"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'" aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap" ng-controller="movingFeatureController as ctrl">
+            <aol-map>
+                <aol-view aol-zoom="10">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="ctrl.featureLongitude" aol-y="ctrl.featureLatitude">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                            <aol-style>
+                                <aol-style-circle aol-radius="10" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="'#99FF66'"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'" aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="latitude">latitude:</label>
+                    <input type="text"
+                           name="latitude"
+                           id="latitude"
+                           class="form-control"
+                           ng-model="ctrl.featureLatitude"
+                           ng-model-options="{ debounce: 1000 }">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="longitude">longitude:</label>
+                    <input type="text"
+                           name="longitude"
+                           id="longitude"
+                           class="form-control"
+                           ng-model="ctrl.featureLongitude"
+                           ng-model-options="{ debounce: 1000 }">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <h2>Updating features styles</h2>
+    <p>
+        Similarly to coordinates, style directives reflect changes made to their model, e.g. change the color attribute
+        of an <strong>aol-fill</strong> directive and the styled elements will have an updated color. The following
+        example
+        demonstrate this behaviour.
+    </p>
+
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            [angular controller]
+
+            angular.module('example').controller('updatingFeatureStyleController', function($interval){
+            var _this = this;
+            _this.featureColor = '#FF0000';
+            });
+
+            [html file]
+
+            <div ng-controller="updatingFeatureStyleController as ctrl"></div>
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                            <aol-style>
+                                <aol-style-circle aol-radius="10" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="ctrl.featureColor"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'" aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap" ng-controller="updatingFeatureStyleController as ctrl">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                            <aol-style>
+                                <aol-style-circle aol-radius="10" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="ctrl.featureColor"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'" aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="color">feature color:</label>
+                    <input type="text"
+                           name="color"
+                           id="color"
+                           class="form-control"
+                           ng-model="ctrl.featureColor"
+                           ng-model-options="{ debounce: 1000 }">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>Overlays</h2>
+    <p>
+        the <strong>aol-overlay</strong> directive renders its content on top of the map, at a given location, as shown
+        in the next example.
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 col-lg-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-view aol-zoom="16">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-overlay aol-positioning="center-center">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Wilson bridge</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <img src="./external/193px-Pont-R09-Wilson-06.jpeg"
+                                 alt="pont Wilson">
+                        </div>
+                        <div class="panel-footer">
+                            <div>
+                                <a href="https://commons.wikimedia.org/wiki/File:Pont-R09-Wilson-06.JPG#/media/File:Pont-R09-Wilson-06.JPG">Pont-R09-Wilson-06</a>
+                                by <a href="//commons.wikimedia.org/wiki/User:Basilio" title="User:Basilio"
+                                      class="mw-redirect">Basilio</a>.
+                            </div>
+
+                            <div><a href="http://creativecommons.org/licenses/by-sa/3.0"
+                                    title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a> via <a
+                                    href="//commons.wikimedia.org/wiki/">Wikimedia Commons</a>.
+                            </div>
+                        </div>
+                    </div>
+                    <aol-coordinate aol-x="4.839306" aol-y="45.760068">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-overlay>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 col-lg-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-view aol-zoom="16">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-overlay aol-positioning="center-center">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Wilson bridge</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <img src="./external/193px-Pont-R09-Wilson-06.jpeg"
+                                 alt="pont Wilson">
+                        </div>
+                        <div class="panel-footer">
+                            <div>
+                                <a href="https://commons.wikimedia.org/wiki/File:Pont-R09-Wilson-06.JPG#/media/File:Pont-R09-Wilson-06.JPG">Pont-R09-Wilson-06</a>
+                                by <a href="//commons.wikimedia.org/wiki/User:Basilio" title="User:Basilio"
+                                      class="mw-redirect">Basilio</a>.
+                            </div>
+
+                            <div><a href="http://creativecommons.org/licenses/by-sa/3.0"
+                                    title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a> via <a
+                                    href="//commons.wikimedia.org/wiki/">Wikimedia Commons</a>.
+                            </div>
+                        </div>
+                    </div>
+                    <aol-coordinate aol-x="4.839306" aol-y="45.760068">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-overlay>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+
+    <h2>Interacting with the map</h2>
+    <p>
+        This example shows how to interact with the map. Hover over the feature and notice the cursor changing to a
+        pointing hand then click on the feature. The cursor will change to an open hand and let drag the feature to a
+        new position.
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-collection-interaction>
+                    <aol-interaction-defaults></aol-interaction-defaults>
+                    <aol-interaction-translate>
+                        <aol-interaction-select></aol-interaction-select>
+                    </aol-interaction-translate>
+                </aol-collection-interaction>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="ctrl.featureLongitude"
+                                                aol-y="ctrl.featureLatitude">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                            <aol-style>
+                                <aol-style-circle aol-radius="6" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="'#FF0000'"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'" aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap" ng-controller="interactionFeatureUpdateController as ctrl">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-collection-interaction>
+                    <aol-interaction-defaults></aol-interaction-defaults>
+                    <aol-interaction-translate>
+                        <aol-interaction-select></aol-interaction-select>
+                    </aol-interaction-translate>
+                </aol-collection-interaction>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="ctrl.featureLongitude"
+                                                aol-y="ctrl.featureLatitude">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                            <aol-style>
+                                <aol-style-circle aol-radius="6" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="'#FF0000'"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'" aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="latitude_2">latitude:</label>
+                    <input type="text"
+                           name="latitude_2"
+                           id="latitude_2"
+                           class="form-control"
+                           ng-model="ctrl.featureLatitude"
+                           ng-model-options="{ debounce: 1000 }">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="longitude_2">longitude:</label>
+                    <input type="text"
+                           name="longitude_2"
+                           id="longitude_2"
+                           class="form-control"
+                           ng-model="ctrl.featureLongitude"
+                           ng-model-options="{ debounce: 1000 }">
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>
+        [TODO] explain how the chaining is done, i.e. passing the select to the translate.
+    </p>
+    <p>
+        Interactions passed to the aol-map directive apply to the whole map, i.e. all layers and included features.
+        In some occasions, we want to restrict the interactions to a given layer, or collection of layers. In the
+        following example, we demonstrate how to do so.
+    </p>
+    <div class="row flex">
+        <div hljs class="col-md-7 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-collection-interaction>
+                    <aol-interaction-defaults></aol-interaction-defaults>
+                    <aol-interaction-translate>
+                        <aol-interaction-select></aol-interaction-select>
+                    </aol-interaction-translate>
+                </aol-collection-interaction>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-layer-vector>
+                    <aol-source-vector>
+                        <aol-feature>
+                            <aol-geometry-point>
+                                <aol-coordinate aol-x="ctrl.featureLongitude"
+                                                aol-y="ctrl.featureLatitude">
+                                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                </aol-coordinate>
+                            </aol-geometry-point>
+                            <aol-style>
+                                <aol-style-circle aol-radius="6" aol-snap-to-pixel="true">
+                                    <aol-style-fill aol-color="'#FF0000'"></aol-style-fill>
+                                    <aol-style-stroke aol-color="'#000000'" aol-width="1.25">
+                                    </aol-style-stroke>
+                                </aol-style-circle>
+                            </aol-style>
+                        </aol-feature>
+                    </aol-source-vector>
+                </aol-layer-vector>
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+        <div class="col-md-5 flex flex-column-wrap">
+            <aol-map>
+                <aol-view aol-zoom="14">
+                    <aol-coordinate aol-x="4.84" aol-y="45.76">
+                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                    </aol-coordinate>
+                </aol-view>
+                <aol-collection-interaction>
+                    <aol-interaction-defaults></aol-interaction-defaults>
+                </aol-collection-interaction>
+                <aol-layer-tile>
+                    <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                    </aol-source-osm>
+                </aol-layer-tile>
+                <aol-collection-layer>
+                    <aol-layer-vector>
+                        <aol-source-vector>
+                            <aol-feature>
+                                <aol-geometry-point>
+                                    <aol-coordinate aol-x="4.84"
+                                                    aol-y="45.76">
+                                        <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                    </aol-coordinate>
+                                </aol-geometry-point>
+                                <aol-style>
+                                    <aol-style-circle aol-radius="6" aol-snap-to-pixel="true">
+                                        <aol-style-fill aol-color="'#FF0000'"></aol-style-fill>
+                                        <aol-style-stroke aol-color="'#000000'" aol-width="1.25">
+                                        </aol-style-stroke>
+                                    </aol-style-circle>
+                                </aol-style>
+                            </aol-feature>
+                        </aol-source-vector>
+                        <aol-collection-interaction>
+                            <aol-interaction-translate>
+                                <aol-interaction-select></aol-interaction-select>
+                            </aol-interaction-translate>
+                        </aol-collection-interaction>
+                    </aol-layer-vector>
+                    <aol-layer-vector>
+                        <aol-source-vector>
+                            <aol-feature>
+                                <aol-geometry-linestring>
+                                    <aol-collection-coordinate>
+                                        <aol-coordinate aol-x="4.84" aol-y="45.76">
+                                            <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                        </aol-coordinate>
+                                        <aol-coordinate aol-x="4.845" aol-y="45.765">
+                                            <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                        </aol-coordinate>
+                                        <aol-coordinate aol-x="4.85" aol-y="45.76">
+                                            <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                                        </aol-coordinate>
+                                    </aol-collection-coordinate>
+                                </aol-geometry-linestring>
+                                <aol-style>
+                                    <aol-style-stroke aol-color="'#FF00CC'" aol-width="2.25"></aol-style-stroke>
+                                </aol-style>
+                            </aol-feature>
+                        </aol-source-vector>
+                    </aol-layer-vector>
+                </aol-collection-layer>
+
+                <aol-control-attribution></aol-control-attribution>
+            </aol-map>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

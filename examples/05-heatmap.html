@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Heatmap example</title>
+
+    <link rel="stylesheet" href="../bower_components/ol4/ol.css">
+    <link rel="stylesheet" href="../dist/angular-openlayers.css">
+    <link rel="stylesheet" href="99-style.css">
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/ol4/ol-debug.js"></script>
+    <script src="../dist/angular-openlayers.js"></script>
+    <script src="05-heatmap.js"></script>
+</head>
+
+<body ng-app="example">
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>AngularOpenLayers examples</h1>
+    </div>
+    <h2>Heatmap example</h2>
+    <p>
+        The following example demonstrates how to build a Heatmap.
+    </p>
+    <div class="container" ng-controller="exampleCtrl as ctrl">
+        <aol-map>
+            <aol-view aol-zoom="12">
+                <aol-coordinate aol-x="5.79" aol-y="45.2">
+                    <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                </aol-coordinate>
+            </aol-view>
+            <aol-layer-tile>
+                <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                </aol-source-osm>
+            </aol-layer-tile>
+
+            <aol-layer-heatmap aol-radius="20">
+                <aol-source-vector>
+                    <aol-feature ng-repeat="measure in ctrl.measures" aol-model="measure.feature">
+                        <aol-geometry-point>
+                            <aol-coordinate aol-model="measure.coordinate">
+                                <aol-projection aol-code="'EPSG:4326'"></aol-projection>
+                            </aol-coordinate>
+                        </aol-geometry-point>
+                    </aol-feature>
+
+                </aol-source-vector>
+            </aol-layer-heatmap>
+        </aol-map>
+    </div>
+
+</div>
+</body>
+</html>

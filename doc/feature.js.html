@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: feature.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: feature.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Feature model class.
+ *
+ * @class
+ * @augments aol.models.Model
+ * @property {(ol.geom.Geometry|Object|undefined)} attributes.geometry                                 - geometry.
+ * @property {(ol.style.Style|ol.style.Style[]|ol.FeatureStyleFunction|undefined)} attributes.style    - style.
+ * @property {(Object|undefined)} attributes.properties                                                - properties.
+ */
+aol.models.Feature = function() {
+    aol.models.Model.apply(this, arguments);
+    this.attributes.geometry = undefined;
+    this.attributes.style = undefined;
+    this.attributes.properties = undefined;
+    this.callbacks['change'] = undefined;
+    this.callbacks['change:geometry'] = undefined;
+    this.callbacks['change:style'] = undefined;
+    this.callbacks['change:id'] = undefined;
+    this.callbacks['propertychange'] = undefined;
+};
+
+/**
+ * Feature directive class.
+ * @class
+ * @augments aol.Directive
+ */
+aol.directives.Feature = function() {
+    aol.Directive.apply(this, arguments);
+    this.name = 'aolFeature';
+    this.require = ['^aolSourceVector'];
+    this.instance = ol.Feature;
+    this.model = aol.models.Feature;
+    this.onParentInstance = function(parentInst, instance) {parentInst.addFeature(instance);};
+    this.onDestroy = function(parentInst, instance) { parentInst.removeFeature(instance);};
+};
+
+aol.registerDirective(new aol.directives.Feature());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="aol.Directive.html">Directive</a></li><li><a href="aol.directives.CollectionCoordinate.html">CollectionCoordinate</a></li><li><a href="aol.directives.CollectionInteraction.html">CollectionInteraction</a></li><li><a href="aol.directives.CollectionLayer.html">CollectionLayer</a></li><li><a href="aol.directives.CollectionStyle.html">CollectionStyle</a></li><li><a href="aol.directives.ControlAttribution.html">ControlAttribution</a></li><li><a href="aol.directives.ControlFullScreen.html">ControlFullScreen</a></li><li><a href="aol.directives.ControlMousePosition.html">ControlMousePosition</a></li><li><a href="aol.directives.ControlOverviewMap.html">ControlOverviewMap</a></li><li><a href="aol.directives.ControlRotate.html">ControlRotate</a></li><li><a href="aol.directives.ControlScaleLine.html">ControlScaleLine</a></li><li><a href="aol.directives.ControlZoom.html">ControlZoom</a></li><li><a href="aol.directives.ControlZoomSlider.html">ControlZoomSlider</a></li><li><a href="aol.directives.ControlZoomToExtent.html">ControlZoomToExtent</a></li><li><a href="aol.directives.Coordinate.html">Coordinate</a></li><li><a href="aol.directives.Feature.html">Feature</a></li><li><a href="aol.directives.GeometryCircle.html">GeometryCircle</a></li><li><a href="aol.directives.GeometryLinearRing.html">GeometryLinearRing</a></li><li><a href="aol.directives.GeometryLineString.html">GeometryLineString</a></li><li><a href="aol.directives.GeometryMultiLineString.html">GeometryMultiLineString</a></li><li><a href="aol.directives.GeometryMultiPoint.html">GeometryMultiPoint</a></li><li><a href="aol.directives.GeometryMultiPolygon.html">GeometryMultiPolygon</a></li><li><a href="aol.directives.GeometryPoint.html">GeometryPoint</a></li><li><a href="aol.directives.GeometryPolygon.html">GeometryPolygon</a></li><li><a href="aol.directives.InteractionDefaults.html">InteractionDefaults</a></li><li><a href="aol.directives.InteractionSelect.html">InteractionSelect</a></li><li><a href="aol.directives.InteractionTranslate.html">InteractionTranslate</a></li><li><a href="aol.directives.LayerHeatmap.html">LayerHeatmap</a></li><li><a href="aol.directives.LayerImage.html">LayerImage</a></li><li><a href="aol.directives.LayerTile.html">LayerTile</a></li><li><a href="aol.directives.LayerVector.html">LayerVector</a></li><li><a href="aol.directives.Map.html">Map</a></li><li><a href="aol.directives.Overlay.html">Overlay</a></li><li><a href="aol.directives.Projection.html">Projection</a></li><li><a href="aol.directives.SourceBingMaps.html">SourceBingMaps</a></li><li><a href="aol.directives.SourceCluster.html">SourceCluster</a></li><li><a href="aol.directives.SourceImageMapGuide.html">SourceImageMapGuide</a></li><li><a href="aol.directives.SourceImageStatic.html">SourceImageStatic</a></li><li><a href="aol.directives.SourceImageVector.html">SourceImageVector</a></li><li><a href="aol.directives.SourceImageWMS.html">SourceImageWMS</a></li><li><a href="aol.directives.SourceMapQuest.html">SourceMapQuest</a></li><li><a href="aol.directives.SourceOSM.html">SourceOSM</a></li><li><a href="aol.directives.SourceRaster.html">SourceRaster</a></li><li><a href="aol.directives.SourceStamen.html">SourceStamen</a></li><li><a href="aol.directives.SourceTileARCGistRest.html">SourceTileARCGistRest</a></li><li><a href="aol.directives.SourceTileJSON.html">SourceTileJSON</a></li><li><a href="aol.directives.SourceTileUTFGrid.html">SourceTileUTFGrid</a></li><li><a href="aol.directives.SourceTileVector.html">SourceTileVector</a></li><li><a href="aol.directives.SourceTileWMS.html">SourceTileWMS</a></li><li><a href="aol.directives.SourceVector.html">SourceVector</a></li><li><a href="aol.directives.SourceWMTS.html">SourceWMTS</a></li><li><a href="aol.directives.SourceXYZ.html">SourceXYZ</a></li><li><a href="aol.directives.SourceZoomify.html">SourceZoomify</a></li><li><a href="aol.directives.Style.html">Style</a></li><li><a href="aol.directives.StyleCircle.html">StyleCircle</a></li><li><a href="aol.directives.StyleFill.html">StyleFill</a></li><li><a href="aol.directives.StyleIcon.html">StyleIcon</a></li><li><a href="aol.directives.StyleRegularShape.html">StyleRegularShape</a></li><li><a href="aol.directives.StyleStroke.html">StyleStroke</a></li><li><a href="aol.directives.StyleText.html">StyleText</a></li><li><a href="aol.directives.View.html">View</a></li><li><a href="aol.models.collections.Coordinate.html">Coordinate</a></li><li><a href="aol.models.collections.Interaction.html">Interaction</a></li><li><a href="aol.models.collections.Layer.html">Layer</a></li><li><a href="aol.models.collections.Style.html">Style</a></li><li><a href="aol.models.controls.Attribution.html">Attribution</a></li><li><a href="aol.models.controls.Control.html">Control</a></li><li><a href="aol.models.controls.FullScreen.html">FullScreen</a></li><li><a href="aol.models.controls.MousePosition.html">MousePosition</a></li><li><a href="aol.models.controls.OverviewMap.html">OverviewMap</a></li><li><a href="aol.models.controls.Rotate.html">Rotate</a></li><li><a href="aol.models.controls.ScaleLine.html">ScaleLine</a></li><li><a href="aol.models.controls.Zoom.html">Zoom</a></li><li><a href="aol.models.controls.ZoomSlider.html">ZoomSlider</a></li><li><a href="aol.models.controls.ZoomToExtent.html">ZoomToExtent</a></li><li><a href="aol.models.Coordinate.html">Coordinate</a></li><li><a href="aol.models.Feature.html">Feature</a></li><li><a href="aol.models.geometries.Circle.html">Circle</a></li><li><a href="aol.models.geometries.LinearRing.html">LinearRing</a></li><li><a href="aol.models.geometries.LineString.html">LineString</a></li><li><a href="aol.models.geometries.MultiLineString.html">MultiLineString</a></li><li><a href="aol.models.geometries.MultiPoint.html">MultiPoint</a></li><li><a href="aol.models.geometries.MultiPolygon.html">MultiPolygon</a></li><li><a href="aol.models.geometries.Point.html">Point</a></li><li><a href="aol.models.geometries.Polygon.html">Polygon</a></li><li><a href="aol.models.geometries.SimpleGeometry.html">SimpleGeometry</a></li><li><a href="aol.models.interactions.Defaults.html">Defaults</a></li><li><a href="aol.models.interactions.Pointer.html">Pointer</a></li><li><a href="aol.models.interactions.Select.html">Select</a></li><li><a href="aol.models.interactions.Translate.html">Translate</a></li><li><a href="aol.models.layers.Heatmap.html">Heatmap</a></li><li><a href="aol.models.layers.Image.html">Image</a></li><li><a href="aol.models.layers.Layer.html">Layer</a></li><li><a href="aol.models.layers.Tile.html">Tile</a></li><li><a href="aol.models.layers.Vector.html">Vector</a></li><li><a href="aol.models.Map.html">Map</a></li><li><a href="aol.models.Model.html">Model</a></li><li><a href="aol.models.Overlay.html">Overlay</a></li><li><a href="aol.models.Projection.html">Projection</a></li><li><a href="aol.models.sources.BingMaps.html">BingMaps</a></li><li><a href="aol.models.sources.Cluster.html">Cluster</a></li><li><a href="aol.models.sources.ImageCanvas.html">ImageCanvas</a></li><li><a href="aol.models.sources.ImageMapGuide.html">ImageMapGuide</a></li><li><a href="aol.models.sources.ImageStatic.html">ImageStatic</a></li><li><a href="aol.models.sources.ImageVector.html">ImageVector</a></li><li><a href="aol.models.sources.ImageWMS.html">ImageWMS</a></li><li><a href="aol.models.sources.MapQuest.html">MapQuest</a></li><li><a href="aol.models.sources.OSM.html">OSM</a></li><li><a href="aol.models.sources.Raster.html">Raster</a></li><li><a href="aol.models.sources.Stamen.html">Stamen</a></li><li><a href="aol.models.sources.TileArcGISRest.html">TileArcGISRest</a></li><li><a href="aol.models.sources.TileImage.html">TileImage</a></li><li><a href="aol.models.sources.TileJSON.html">TileJSON</a></li><li><a href="aol.models.sources.TileUTFGrid.html">TileUTFGrid</a></li><li><a href="aol.models.sources.TileVector.html">TileVector</a></li><li><a href="aol.models.sources.TileWMS.html">TileWMS</a></li><li><a href="aol.models.sources.Vector.html">Vector</a></li><li><a href="aol.models.sources.WMTS.html">WMTS</a></li><li><a href="aol.models.sources.XYZ.html">XYZ</a></li><li><a href="aol.models.sources.Zoomify.html">Zoomify</a></li><li><a href="aol.models.styles.Circle.html">Circle</a></li><li><a href="aol.models.styles.Fill.html">Fill</a></li><li><a href="aol.models.styles.Icon.html">Icon</a></li><li><a href="aol.models.styles.RegularShape.html">RegularShape</a></li><li><a href="aol.models.styles.Stroke.html">Stroke</a></li><li><a href="aol.models.styles.Style.html">Style</a></li><li><a href="aol.models.styles.Text.html">Text</a></li><li><a href="aol.models.View.html">View</a></li><li><a href="aol.overrides.collections.Coordinate.html">Coordinate</a></li><li><a href="aol.overrides.collections.Interaction.html">Interaction</a></li><li><a href="aol.overrides.collections.Layer.html">Layer</a></li><li><a href="aol.overrides.collections.Style.html">Style</a></li><li><a href="aol.overrides.coordinate.Coordinate.html">Coordinate</a></li><li><a href="aol.overrides.geometries.Circle.html">Circle</a></li><li><a href="aol.overrides.geometries.LinearRing.html">LinearRing</a></li><li><a href="aol.overrides.geometries.LineString.html">LineString</a></li><li><a href="aol.overrides.geometries.MultiLineString.html">MultiLineString</a></li><li><a href="aol.overrides.geometries.MultiPoint.html">MultiPoint</a></li><li><a href="aol.overrides.geometries.MultiPolygon.html">MultiPolygon</a></li><li><a href="aol.overrides.geometries.Point.html">Point</a></li><li><a href="aol.overrides.geometries.Polygon.html">Polygon</a></li></ul><h3>Namespaces</h3><ul><li><a href="aol.html">aol</a></li><li><a href="aol.directives.html">directives</a></li><li><a href="aol.helpers.html">helpers</a></li><li><a href="aol.helpers.collections.html">collections</a></li><li><a href="aol.helpers.collections.coordinate.html">coordinate</a></li><li><a href="aol.helpers.controls.html">controls</a></li><li><a href="aol.helpers.coordinate.html">coordinate</a></li><li><a href="aol.helpers.geometries.html">geometries</a></li><li><a href="aol.helpers.interactions.html">interactions</a></li><li><a href="aol.helpers.layers.html">layers</a></li><li><a href="aol.helpers.layers.base.html">base</a></li><li><a href="aol.helpers.layers.heatmap.html">heatmap</a></li><li><a href="aol.log.html">log</a></li><li><a href="aol.models.html">models</a></li><li><a href="aol.models.collections.html">collections</a></li><li><a href="aol.models.controls.html">controls</a></li><li><a href="aol.models.geometries.html">geometries</a></li><li><a href="aol.models.interactions.html">interactions</a></li><li><a href="aol.models.layers.html">layers</a></li><li><a href="aol.models.sources.html">sources</a></li><li><a href="aol.models.styles.html">styles</a></li><li><a href="aol.overrides.html">overrides</a></li><li><a href="aol.overrides.collections.html">collections</a></li><li><a href="aol.overrides.coordinate.html">coordinate</a></li><li><a href="aol.overrides.geometries.html">geometries</a></li></ul><h3>Global</h3><ul><li><a href="global.html#librairy">librairy</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon May 09 2016 10:43:59 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

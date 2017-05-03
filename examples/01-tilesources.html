@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tile Sources Examples</title>
+
+    <link rel="stylesheet" href="../bower_components/ol4/ol.css">
+    <link rel="stylesheet" href="../dist/angular-openlayers.css">
+    <link rel="stylesheet" href="99-style.css">
+
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/ol4/ol-debug.js"></script>
+    <script src="../dist/angular-openlayers.js"></script>
+    <script src="01-tilesources.js"></script>
+</head>
+
+<body ng-app="example">
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>AngularOpenLayers examples</h1>
+    </div>
+    <h2>Tile sources</h2>
+    <p>
+        The following examples demonstrate how to import tiles from different places. Here, we import tiles from
+        OpenStreetMap, BingMaps, MapBox, Mapquest.
+    </p>
+
+    <div class="container-fluid">
+        <h4>OpenStreetMap</h4>
+        <div class="row flex">
+            <div hljs class="col-md-7 flex flex-column-wrap">
+                <aol-map>
+                    <aol-layer-tile>
+                        <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                        </aol-source-osm>
+                    </aol-layer-tile>
+                </aol-map>
+            </div>
+            <div class="col-md-5 flex flex-column-wrap">
+                <aol-map>
+                    <aol-layer-tile>
+                        <aol-source-osm aol-url="'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'">
+                        </aol-source-osm>
+                    </aol-layer-tile>
+                </aol-map>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <h4>BingMaps</h4>
+        <div class="row flex">
+            <div hljs class="col-md-7 flex flex-column-wrap">
+                <aol-map>
+                    <aol-layer-tile>
+                        <aol-source-bingmaps
+                                aol-key="'your key'"
+                                aol-imagery-set="'Road'">
+                        </aol-source-bingmaps>
+                    </aol-layer-tile>
+                </aol-map>
+            </div>
+            <div class="col-md-5 flex flex-column-wrap">
+                <aol-map>
+                    <aol-layer-tile>
+                        <aol-source-bingmaps
+                                aol-key="'Ak-dzM4wZjSqTlzveKz5u0d4IQ4bRzVI309GxmkgSVr1ewS6iPSrOvOKhA-CJlm3'"
+                                aol-imagery-set="'Road'">
+                        </aol-source-bingmaps>
+                    </aol-layer-tile>
+                </aol-map>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <h4>MapBox</h4>
+        <div class="row flex">
+            <div hljs class="col-md-7 flex flex-column-wrap">
+                <aol-map>
+                    <aol-layer-tile>
+                        <aol-source-xyz
+                                aol-url="'https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=your.token'">
+                        </aol-source-xyz>
+                    </aol-layer-tile>
+                </aol-map>
+            </div>
+            <div class="col-md-5 flex flex-column-wrap">
+                <aol-map>
+                    <aol-layer-tile>
+                        <aol-source-xyz
+                                aol-url="'https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYWhvY2V2YXIiLCJhIjoiRk1kMWZaSSJ9.E5BkluenyWQMsBLsuByrmg'">
+                        </aol-source-xyz>
+                    </aol-layer-tile>
+                </aol-map>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <h4>MapQuest</h4>
+        <div class="row flex">
+            <div hljs class="col-md-7 flex flex-column-wrap">
+                <aol-map>
+                    <aol-layer-tile>
+                        <aol-source-mapquest aol-layer="'sat'">
+                        </aol-source-mapquest>
+                    </aol-layer-tile>
+                </aol-map>
+            </div>
+            <div class="col-md-5 flex flex-column-wrap">
+                <aol-map>
+                    <aol-layer-tile>
+                        <aol-source-mapquest aol-layer="'sat'">
+                        </aol-source-mapquest>
+                    </aol-layer-tile>
+                </aol-map>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

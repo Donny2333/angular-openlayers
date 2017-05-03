@@ -1,0 +1,35 @@
+.fullscreen {
+    height: 100% !important;
+    width: 100% !important;
+}
+.container-map {
+    height: 250px;
+}
+
+@media (min-width: 768px) {
+    .flex {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    .flex-column-wrap {
+        -webkit-flex-flow: column wrap;
+        -ms-flex-flow: column wrap;
+        flex-flow: column wrap;
+    }
+
+    .flex-item {
+        height: 100%;
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 0 auto;
+        -ms-flex: 1 0 auto;
+        flex: 1 0 auto;
+    }
+}
+
+.info-box {
+    height: 200px;
+    width: 200px;
+}
