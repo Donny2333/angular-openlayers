@@ -18,11 +18,3 @@ It means that anyone familiar to OpenLayers3 will be proficient in an instant wi
 ```bash
     bower install angular-openlayers
 ```
-
-## License
-Code: Mozilla Public License Version 2.0 (MPL-2.0).
-Documentation:  CC-BY-SA 3.0
-
-Copyright 2015 Orange
-
-
